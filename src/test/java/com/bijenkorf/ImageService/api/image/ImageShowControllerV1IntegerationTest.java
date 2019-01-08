@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.util.HtmlUtils;
 
 import com.bijenkorf.ImageService.BkImageServiceApplication;
 import com.bijenkorf.ImageService.service.image.ImageStorageService;
@@ -36,7 +37,7 @@ public class ImageShowControllerV1IntegerationTest {
 	@Test
 	public void test() throws Exception {
 
-		mvc.perform(get("/api/v1/image/show/THUMBNAIL/dummySeoName/?reference=/test.jpg"))
+		mvc.perform(get("/api/v1/image/show/THUMBNAIL/dummySeoName/").param("reference", HtmlUtils.htmlEscape("/test.jpg")))
 				// this data doesn't exist, so expect error
 				.andExpect(status().is4xxClientError());
 	}

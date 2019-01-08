@@ -46,8 +46,8 @@ public class ImageShowControllerV1Test {
 		String invalidImageType = "asdasdad";
 		assert Arrays.stream(DefinedImageType.values()).noneMatch(dit -> dit.name().equalsIgnoreCase(invalidImageType));
 
-		mvc.perform(get("/api/v1/image/show/" + invalidImageType + "/dummySeoName").param("reference", "/test.jpg"))
-				.andExpect(status().is4xxClientError());
+		mvc.perform(get("/api/v1/image/show/" + invalidImageType + "/dummySeoName").param("reference",
+				HtmlUtils.htmlEscape("/test.jpg"))).andExpect(status().is4xxClientError());
 
 		// as there's an error there shouldn't be interactions with the service
 		verifyNoMoreInteractions(imageStorageService);
@@ -55,8 +55,8 @@ public class ImageShowControllerV1Test {
 
 	@Test
 	public void testValidPredefinedImage() throws Exception {
-		mvc.perform(
-				get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName/?reference=/test.jpg"))
+		mvc.perform(get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName").param("reference",
+				HtmlUtils.htmlEscape("/test.jpg")))
 				// expect error as image doesn't exist
 				.andExpect(status().is4xxClientError());
 
