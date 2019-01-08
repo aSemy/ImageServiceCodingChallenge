@@ -1,8 +1,10 @@
 package com.bijenkorf.ImageService.api.image;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -41,7 +43,7 @@ public class ImageShowControllerV1 {
 	 */
 	@RequestMapping("/show/{predefinedImageType}/{dummySeoName}/?reference={relativeFileLocation}")
 	@ResponseBody
-	public String imageShowWithSEO(//
+	public ResponseEntity<String> imageShowWithSEO(//
 			@PathVariable("predefinedImageType") final String predefinedImageType, //
 			@PathVariable("dummySeoName") final String dummySeoName, //
 			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
@@ -68,7 +70,7 @@ public class ImageShowControllerV1 {
 	 */
 	@RequestMapping("/show/{predefinedImageType}/?reference={relativeFileLocation}")
 	@ResponseBody
-	public String imageShowWithoutSEO(//
+	public ResponseEntity<String> imageShowWithoutSEO(//
 			@PathVariable("predefinedImageType") final String predefinedImageType, //
 			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
 
@@ -76,10 +78,17 @@ public class ImageShowControllerV1 {
 
 	}
 
-	public String imageShow(final String predefinedImageType, final Optional<String> dummySeoNameOptional,
-			final String relativeFileLocation) {
+	public ResponseEntity<String> imageShow(final String predefinedImageType,
+			final Optional<String> dummySeoNameOptional, final String relativeFileLocation) {
 
-		return imageStorageService.storeImage(predefinedImageType, dummySeoNameOptional, relativeFileLocation);
+		try {
+			String storedImageURL = imageStorageService.storeImage(predefinedImageType, dummySeoNameOptional,
+					relativeFileLocation);
+			return ResponseEntity.ok(storedImageURL);
+		} catch (IOException e) {
+// TODO log error
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 }
