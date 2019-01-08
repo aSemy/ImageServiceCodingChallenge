@@ -3,15 +3,27 @@ package com.bijenkorf.ImageService.model;
 import java.awt.Color;
 
 public class DefinedImageTypeProperties {
-	private long height;
-	private long width;
-	private long quality;
-	private ImageScaleType scaleType;
-	private Color fillColour;
-	private ImageFileType imageType;
+	private final int height;
+	private final int width;
+	private final int quality;
+	private final ImageScaleType scaleType;
+	private final Color fillColour;
+	private final ImageFileType imageType;
+	// to implement later
+	// private String sourceName;
 
-	public DefinedImageTypeProperties(long height, long width, long quality, ImageScaleType scaleType,
-			Color fillColour, ImageFileType imageType) {
+	private static final Color TRANSPARENT = new Color(0, 0, 0, 0);
+
+	/**
+	 * Default {@link #fillColour} to {@link #TRANSPARENT}
+	 */
+	public DefinedImageTypeProperties(int height, int width, int quality, ImageScaleType scaleType,
+			ImageFileType imageType) {
+		this(height, width, quality, scaleType, TRANSPARENT, imageType);
+	}
+
+	public DefinedImageTypeProperties(int height, int width, int quality, ImageScaleType scaleType, Color fillColour,
+			ImageFileType imageType) {
 		super();
 		this.height = height;
 		this.width = width;
@@ -21,59 +33,28 @@ public class DefinedImageTypeProperties {
 		this.imageType = imageType;
 	}
 
-	public long getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
-	public void setHeight(long height) {
-		this.height = height;
-	}
-
-	public long getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
-	public void setWidth(long width) {
-		this.width = width;
-	}
-
-	public long getQuality() {
+	public int getQuality() {
 		return quality;
-	}
-
-	public void setQuality(long quality) {
-		this.quality = quality;
 	}
 
 	public ImageScaleType getScaleType() {
 		return scaleType;
 	}
 
-	public void setScaleType(ImageScaleType scaleType) {
-		this.scaleType = scaleType;
-	}
-
 	public Color getFillColour() {
 		return fillColour;
-	}
-
-	public void setFillColour(Color fillColour) {
-		this.fillColour = fillColour;
-	}
-
-	public void setFillColour(String hex) {
-		this.fillColour = Color.decode(hex);
 	}
 
 	public ImageFileType getImageType() {
 		return imageType;
 	}
-
-	public void setImageType(ImageFileType imageType) {
-		this.imageType = imageType;
-	}
-
-	// to implement later
-	// private String sourceName;
 
 }
