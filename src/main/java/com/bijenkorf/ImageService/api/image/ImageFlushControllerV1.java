@@ -43,7 +43,7 @@ public class ImageFlushControllerV1 {
 	 * @param relativeFileLocation_HTMLEscaped
 	 * @return
 	 */
-	@RequestMapping("/flush/{definedImageType}")
+	@RequestMapping(name = "/flush/{definedImageType}")
 	@ResponseBody
 	public ResponseEntity<Object> flushImageType(//
 			@PathVariable("definedImageType") final DefinedImageType definedImageType, //

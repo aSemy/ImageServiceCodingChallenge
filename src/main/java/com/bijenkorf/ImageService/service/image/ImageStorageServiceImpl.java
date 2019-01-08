@@ -26,6 +26,8 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 	private CloudHostingService cloudHostingService;
 	@Autowired
 	private ImageEditingService imageEditingService;
+	@Autowired
+	private ImageFetcherService imageFetcherService;
 
 	@Override
 	public String storeImage(DefinedImageType targetImageType, Optional<String> dummySeoNameOptional,
@@ -61,10 +63,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 			URL originalImageURL = storeOrFetchOriginalImageURL(relativeFileLocation);
 
 			// fetch the original
-			BufferedImage originalImage = ImageIO.read(originalImageURL);
+			BufferedImage originalImage = imageFetcherService.fetchImage(originalImageURL);
 
 			// now process the original so it's optimised
-			Image processedImage = imageEditingService.processImage(originalImage, targetImageType);
+			BufferedImage processedImage = imageEditingService.processImage(originalImage, targetImageType);
 
 			// now store it
 			cloudHostingService.addImage(targetImageType, relativeFileLocation, processedImage);
@@ -91,7 +93,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 			// the original is NOT hosted, so store it
 
 			// fetch it
-			BufferedImage originalImage = ImageIO.read(getImageURL(relativeFileLocation));
+			BufferedImage originalImage = imageFetcherService.fetchImage(getImageURL(relativeFileLocation));
 
 			// store it
 			cloudHostingService.addImage(DefinedImageType.ORIGINAL, relativeFileLocation, originalImage);
