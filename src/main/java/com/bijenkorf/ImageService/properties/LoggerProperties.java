@@ -1,8 +1,10 @@
 package com.bijenkorf.ImageService.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "logger-properties")
+@Component
 public class LoggerProperties {
 	/**
 	 * the database endpoint for writing logs

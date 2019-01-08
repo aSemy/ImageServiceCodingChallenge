@@ -1,8 +1,10 @@
 package com.bijenkorf.ImageService.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix="aws-properties")
+@Component
 public class AWSProperties {
 	/**
 	 * endpoint to the S3 bucket to store the images in.

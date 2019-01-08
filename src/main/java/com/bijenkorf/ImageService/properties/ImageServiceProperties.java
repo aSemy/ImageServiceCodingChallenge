@@ -1,8 +1,10 @@
 package com.bijenkorf.ImageService.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 @ConfigurationProperties(prefix = "image-service-properties")
+@Component
 public class ImageServiceProperties {
 	/**
 	 * the root url where to get the images from, i.e.
