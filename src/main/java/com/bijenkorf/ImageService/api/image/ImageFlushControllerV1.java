@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
+import com.bijenkorf.ImageService.model.DefinedImageType;
 import com.bijenkorf.ImageService.service.CloudHostingService;
 
 @RestController
@@ -41,13 +42,13 @@ public class ImageFlushControllerV1 {
 	 * @param relativeFileLocation_HTMLEscaped
 	 * @return
 	 */
-	@RequestMapping("/flush/{predefinedImageType}/?reference={relativeFileLocation}")
+	@RequestMapping("/flush/{definedImageType}/?reference={relativeFileLocation}")
 	@ResponseBody
 	public ResponseEntity<Object> flushImageType(//
-			@PathVariable("predefinedImageType") final String predefinedImageType, //
+			@PathVariable("definedImageType") final DefinedImageType definedImageType, //
 			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
 
-		boolean removeImage = cloudHostingService.removeImage(predefinedImageType,
+		boolean removeImage = cloudHostingService.removeImage(definedImageType,
 				HtmlUtils.htmlUnescape(relativeFileLocation_HTMLEscaped));
 
 		if (removeImage)

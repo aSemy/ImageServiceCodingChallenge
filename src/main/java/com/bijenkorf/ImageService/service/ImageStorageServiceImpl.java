@@ -27,7 +27,7 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 	private ImageEditingService imageEditingService;
 
 	@Override
-	public String storeImage(String predefinedImageType, Optional<String> dummySeoNameOptional,
+	public String storeImage(DefinedImageType targetImageType, Optional<String> dummySeoNameOptional,
 			String relativeFileLocation_HTMLEscaped) throws MalformedURLException, IOException {
 		// ignore seo name for now
 
@@ -35,8 +35,6 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
 		// convert escaped to normal
 		final String relativeFileLocation = HtmlUtils.htmlUnescape(relativeFileLocation_HTMLEscaped);
-		// get image type we want to convert the original to
-		DefinedImageType targetImageType = DefinedImageType.valueOf(predefinedImageType.toUpperCase());
 
 		////////////////
 		// core logic //

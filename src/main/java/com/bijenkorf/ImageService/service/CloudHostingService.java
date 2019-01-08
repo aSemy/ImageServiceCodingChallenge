@@ -11,7 +11,6 @@ public interface CloudHostingService {
 	
 	public URL getImageURL(final DefinedImageType definedImageType, final String relativeFileLocation);
 
-	public boolean removeImage(final String definedImageType, final String relativeFileLocation);
 	public boolean removeImage(final DefinedImageType definedImageType, final String relativeFileLocation);
 	
 	public boolean imageExists(final DefinedImageType definedImageType, final String relativeFileLocation);

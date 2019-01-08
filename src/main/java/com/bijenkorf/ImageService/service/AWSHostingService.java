@@ -17,11 +17,6 @@ public class AWSHostingService implements CloudHostingService {
 	}
 
 	@Override
-	public boolean removeImage(String definedImageType, String relativeFileLocation) {
-		return removeImage(DefinedImageType.valueOf(definedImageType), relativeFileLocation);
-	}
-
-	@Override
 	public boolean removeImage(final DefinedImageType definedImageType, String relativeFileLocation) {
 		// TODO Auto-generated method stub
 		return false;
