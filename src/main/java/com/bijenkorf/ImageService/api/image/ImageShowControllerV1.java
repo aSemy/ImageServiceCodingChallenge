@@ -1,6 +1,5 @@
 package com.bijenkorf.ImageService.api.image;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -19,7 +18,7 @@ import com.bijenkorf.ImageService.service.image.ImageStorageService;
 @RestController
 @RequestMapping("/api/v1/image")
 public class ImageShowControllerV1 {
-	
+
 	private Logger LOGGER = LoggerFactory.getLogger(ImageShowControllerV1.class);
 
 	@Autowired
@@ -90,10 +89,14 @@ public class ImageShowControllerV1 {
 		try {
 			String storedImageURL = imageStorageService.storeImage(definedImageType, dummySeoNameOptional,
 					relativeFileLocation);
+
+			if (storedImageURL == null || storedImageURL.isEmpty())
+				throw new IllegalStateException("Stored image URL was returned as null or empty");
+
 			return ResponseEntity.ok(storedImageURL);
-		} catch (IOException e) {
+		} catch (Throwable e) {
 			// TODO better log message
-			LOGGER.info("Error", e);
+			LOGGER.info("Error. Returning 404.", e);
 			return ResponseEntity.notFound().build();
 		}
 	}
