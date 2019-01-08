@@ -1,22 +1,22 @@
 package com.bijenkorf.ImageService.api.image;
 
-import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.only;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.util.HtmlUtils;
 
 import com.bijenkorf.ImageService.model.DefinedImageType;
 import com.bijenkorf.ImageService.service.image.ImageStorageService;
@@ -40,18 +40,6 @@ public class ImageShowControllerV1Test {
 	 * @throws Exception
 	 */
 	@Test
-	public void test() throws Exception {
-		ResultActions perform = mvc.perform(
-				get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName/?reference=/test.jpg"));
-
-		MvcResult andReturn = perform.andReturn();
-
-		MockHttpServletResponse response = andReturn.getResponse();
-
-		assertEquals(404, response.getStatus());
-	}
-
-	@Test
 	public void testInvalidPredefinedImage() throws Exception {
 
 		// assert we're testing an invalid image def
@@ -67,16 +55,12 @@ public class ImageShowControllerV1Test {
 
 	@Test
 	public void testValidPredefinedImage() throws Exception {
+		mvc.perform(
+				get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName/?reference=/test.jpg"))
+				// expect error as image doesn't exist
+				.andExpect(status().is4xxClientError());
 
-		ResultActions perform = mvc.perform(
-				get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName/?reference=/test.jpg"));
-
-		verifyNoMoreInteractions(imageStorageService);
-
-		MvcResult andReturn = perform.andReturn();
-
-		MockHttpServletResponse response = andReturn.getResponse();
-
-		assertEquals(404, response.getStatus());
+		verify(imageStorageService, only()).storeImage(DefinedImageType.THUMBNAIL, Optional.of("dummySeoName"),
+				HtmlUtils.htmlEscape("/test.jpg"));
 	}
 }
