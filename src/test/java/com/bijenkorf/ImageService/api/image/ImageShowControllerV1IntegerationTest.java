@@ -1,6 +1,7 @@
 package com.bijenkorf.ImageService.api.image;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 
 import com.bijenkorf.ImageService.BkImageServiceApplication;
 import com.bijenkorf.ImageService.service.image.ImageStorageService;
@@ -19,10 +19,10 @@ import com.bijenkorf.ImageService.service.image.ImageStorageService;
  *
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.MOCK, classes = BkImageServiceApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK, classes = BkImageServiceApplication.class)
 @AutoConfigureMockMvc
 public class ImageShowControllerV1IntegerationTest {
-	
+
 	@Autowired
 	private MockMvc mvc;
 	@Autowired
@@ -30,11 +30,15 @@ public class ImageShowControllerV1IntegerationTest {
 
 	/**
 	 * <code>/api/v1/image/show/{definedImageType}/{dummySeoName}/?reference={relativeFileLocation}</code
+	 * 
 	 * @throws Exception
 	 */
 	@Test
 	public void test() throws Exception {
-		ResultActions perform = mvc.perform(get("/api/v1/image/show/THUMBNAIL/dummySeoName/?reference=/test.jpg"));
+
+		mvc.perform(get("/api/v1/image/show/THUMBNAIL/dummySeoName/?reference=/test.jpg"))
+				// this data doesn't exist, so expect error
+				.andExpect(status().is4xxClientError());
 	}
-	
+
 }
