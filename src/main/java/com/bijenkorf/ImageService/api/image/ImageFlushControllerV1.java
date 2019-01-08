@@ -47,7 +47,7 @@ public class ImageFlushControllerV1 {
 			@PathVariable("predefinedImageType") final String predefinedImageType, //
 			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
 
-		boolean removeImage = cloudHostingService.RemoveImage(predefinedImageType,
+		boolean removeImage = cloudHostingService.removeImage(predefinedImageType,
 				HtmlUtils.htmlUnescape(relativeFileLocation_HTMLEscaped));
 
 		if (removeImage)
