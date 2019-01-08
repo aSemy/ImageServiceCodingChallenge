@@ -63,4 +63,19 @@ public class ImageShowControllerV1Test {
 		verify(imageStorageService, only()).storeImage(DefinedImageType.THUMBNAIL, Optional.of("dummySeoName"),
 				HtmlUtils.htmlEscape("/test.jpg"));
 	}
+
+	@Test
+	public void testValidPredefinedImageWrongCase() throws Exception {
+
+		final String ditName = "tHuMbNaIl";
+		assert DefinedImageType.valueOf(ditName.toUpperCase()) == DefinedImageType.THUMBNAIL;
+		
+		mvc.perform(get("/api/v1/image/show/" + ditName + "/dummySeoName").param("reference",
+				HtmlUtils.htmlEscape("/test.jpg")))
+				// expect error as image doesn't exist
+				.andExpect(status().is4xxClientError());
+
+		verify(imageStorageService, only()).storeImage(DefinedImageType.THUMBNAIL, Optional.of("dummySeoName"),
+				HtmlUtils.htmlEscape("/test.jpg"));
+	}
 }
