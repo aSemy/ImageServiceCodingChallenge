@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.util.HtmlUtils;
 
 import com.bijenkorf.ImageService.BkImageServiceApplication;
+import com.bijenkorf.ImageService.model.DefinedImageType;
 import com.bijenkorf.ImageService.service.image.ImageStorageService;
 
 /**
@@ -35,9 +36,10 @@ public class ImageShowControllerV1IntegerationTest {
 	 * @throws Exception
 	 */
 	@Test
-	public void test() throws Exception {
+	public void testErrorWhenFileDoesNotExist() throws Exception {
 
-		mvc.perform(get("/api/v1/image/show/THUMBNAIL/dummySeoName/").param("reference", HtmlUtils.htmlEscape("/test.jpg")))
+		mvc.perform(get("/api/v1/image/show/" + DefinedImageType.THUMBNAIL.name() + "/dummySeoName/").param("reference",
+				HtmlUtils.htmlEscape("/test.jpg")))
 				// this data doesn't exist, so expect error
 				.andExpect(status().is4xxClientError());
 	}
