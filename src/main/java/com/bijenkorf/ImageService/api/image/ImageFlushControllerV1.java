@@ -5,12 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
 
 import com.bijenkorf.ImageService.model.DefinedImageType;
-import com.bijenkorf.ImageService.service.CloudHostingService;
+import com.bijenkorf.ImageService.service.cloud.CloudHostingService;
 
 @RestController
 @RequestMapping("/api/v1/image")
@@ -42,11 +43,11 @@ public class ImageFlushControllerV1 {
 	 * @param relativeFileLocation_HTMLEscaped
 	 * @return
 	 */
-	@RequestMapping("/flush/{definedImageType}/?reference={relativeFileLocation}")
+	@RequestMapping("/flush/{definedImageType}")
 	@ResponseBody
 	public ResponseEntity<Object> flushImageType(//
 			@PathVariable("definedImageType") final DefinedImageType definedImageType, //
-			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
+			@RequestParam(name = "reference", required = true) final String relativeFileLocation_HTMLEscaped) {
 
 		boolean removeImage = cloudHostingService.removeImage(definedImageType,
 				HtmlUtils.htmlUnescape(relativeFileLocation_HTMLEscaped));
@@ -57,9 +58,10 @@ public class ImageFlushControllerV1 {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
-	@RequestMapping("/flush/original/?reference={relativeFileLocation}")
+	@RequestMapping("/flush/original/")
 	@ResponseBody
-	public ResponseEntity<Object> flushAll(@PathVariable("relativeFileLocation") final String relativeFileLocation) {
+	public ResponseEntity<Object> flushAll(
+			@RequestParam(name = "reference", required = true) final String relativeFileLocation_HTMLEscaped) {
 
 		return ResponseEntity.ok().build();
 	}

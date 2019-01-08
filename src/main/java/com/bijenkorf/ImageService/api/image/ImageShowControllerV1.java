@@ -3,19 +3,24 @@ package com.bijenkorf.ImageService.api.image;
 import java.io.IOException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bijenkorf.ImageService.model.DefinedImageType;
-import com.bijenkorf.ImageService.service.ImageStorageService;
+import com.bijenkorf.ImageService.service.image.ImageStorageService;
 
 @RestController
 @RequestMapping("/api/v1/image")
 public class ImageShowControllerV1 {
+	
+	private Logger LOGGER = LoggerFactory.getLogger(ImageShowControllerV1.class);
 
 	@Autowired
 	private ImageStorageService imageStorageService;
@@ -42,12 +47,12 @@ public class ImageShowControllerV1 {
 	 *                                         <code>"/027/790/13_0277901000150001_pro_mod_frt_02_1108_1528_1059540.jpg"</code>
 	 * @return
 	 */
-	@RequestMapping("/show/{definedImageType}/{dummySeoName}/?reference={relativeFileLocation}")
+	@RequestMapping("/show/{definedImageType}/{dummySeoName}")
 	@ResponseBody
 	public ResponseEntity<String> imageShowWithSEO(//
 			@PathVariable("definedImageType") final DefinedImageType definedImageType, //
 			@PathVariable("dummySeoName") final String dummySeoName, //
-			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
+			@RequestParam(name = "reference", required = true) final String relativeFileLocation_HTMLEscaped) {
 
 		return imageShow(definedImageType, Optional.ofNullable(dummySeoName), relativeFileLocation_HTMLEscaped);
 	}
@@ -69,11 +74,11 @@ public class ImageShowControllerV1 {
 	 *                                         <code>"/027/790/13_0277901000150001_pro_mod_frt_02_1108_1528_1059540.jpg"</code>
 	 * @return
 	 */
-	@RequestMapping("/show/{definedImageType}/?reference={relativeFileLocation}")
+	@RequestMapping("/show/{definedImageType}")
 	@ResponseBody
 	public ResponseEntity<String> imageShowWithoutSEO(//
 			@PathVariable("definedImageType") final DefinedImageType definedImageType, //
-			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
+			@RequestParam(name = "reference", required = true) final String relativeFileLocation_HTMLEscaped) {
 
 		return imageShow(definedImageType, Optional.empty(), relativeFileLocation_HTMLEscaped);
 
@@ -87,7 +92,8 @@ public class ImageShowControllerV1 {
 					relativeFileLocation);
 			return ResponseEntity.ok(storedImageURL);
 		} catch (IOException e) {
-// TODO log error
+			// TODO better log message
+			LOGGER.info("Error", e);
 			return ResponseEntity.notFound().build();
 		}
 	}
