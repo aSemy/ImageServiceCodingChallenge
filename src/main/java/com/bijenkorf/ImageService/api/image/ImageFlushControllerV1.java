@@ -1,14 +1,22 @@
 package com.bijenkorf.ImageService.api.image;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
+
+import com.bijenkorf.ImageService.service.CloudHostingService;
 
 @RestController
 @RequestMapping("/api/v1/image")
 public class ImageFlushControllerV1 {
+
+	@Autowired
+	private CloudHostingService cloudHostingService;
 
 	/**
 	 * In some cases it might be required to flush the original and optimized images
@@ -30,19 +38,25 @@ public class ImageFlushControllerV1 {
 	 * <code>~/image/flush/original/?reference=%2F027%2F790%2F13_0277901000150001_pro_mod_frt_02_1108_1528_1059540.jpg</code>
 	 * 
 	 * @param predefinedImageType
-	 * @param relativeFileLocation
+	 * @param relativeFileLocation_HTMLEscaped
 	 * @return
 	 */
-	@RequestMapping("/{predefinedImageType}/?reference={relativeFileLocation}")
+	@RequestMapping("/flush/{predefinedImageType}/?reference={relativeFileLocation}")
 	@ResponseBody
 	public ResponseEntity<Object> flushImageType(//
 			@PathVariable("predefinedImageType") final String predefinedImageType, //
-			@PathVariable("relativeFileLocation") final String relativeFileLocation) {
+			@PathVariable("relativeFileLocation_HTMLEscaped") final String relativeFileLocation_HTMLEscaped) {
 
-		return ResponseEntity.ok().build();
+		boolean removeImage = cloudHostingService.RemoveImage(predefinedImageType,
+				HtmlUtils.htmlUnescape(relativeFileLocation_HTMLEscaped));
+
+		if (removeImage)
+			return ResponseEntity.ok().build();
+		else
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 
-	@RequestMapping("/original/?reference={relativeFileLocation}")
+	@RequestMapping("/flush/original/?reference={relativeFileLocation}")
 	@ResponseBody
 	public ResponseEntity<Object> flushAll(@PathVariable("relativeFileLocation") final String relativeFileLocation) {
 
