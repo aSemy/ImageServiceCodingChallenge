@@ -1,11 +1,14 @@
-package com.bijenkorf.ImageService.service;
+package com.bijenkorf.ImageService.service.image;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
+import org.springframework.stereotype.Service;
+
 import com.bijenkorf.ImageService.model.DefinedImageType;
 import com.bijenkorf.ImageService.model.DefinedImageTypeProperties;
 
+@Service
 public class ImageEditingServiceImpl implements ImageEditingService {
 
 	@Override

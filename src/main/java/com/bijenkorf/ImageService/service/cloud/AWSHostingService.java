@@ -1,4 +1,4 @@
-package com.bijenkorf.ImageService.service;
+package com.bijenkorf.ImageService.service.cloud;
 
 import java.awt.Image;
 import java.net.URL;

@@ -1,4 +1,4 @@
-package com.bijenkorf.ImageService.service;
+package com.bijenkorf.ImageService.service.image;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

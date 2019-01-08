@@ -1,4 +1,4 @@
-package com.bijenkorf.ImageService.service;
+package com.bijenkorf.ImageService.service.image;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -15,6 +15,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import com.bijenkorf.ImageService.model.DefinedImageType;
 import com.bijenkorf.ImageService.properties.ImageServiceProperties;
+import com.bijenkorf.ImageService.service.cloud.CloudHostingService;
 
 @Service
 public class ImageStorageServiceImpl implements ImageStorageService {
@@ -89,8 +90,10 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 		if (!isOriginalHosted) {
 			// the original is NOT hosted, so store it
 
+			// fetch it
 			BufferedImage originalImage = ImageIO.read(getImageURL(relativeFileLocation));
 
+			// store it
 			cloudHostingService.addImage(DefinedImageType.ORIGINAL, relativeFileLocation, originalImage);
 			// confirm it now exists
 			// TODO throw a better exception
@@ -108,5 +111,4 @@ public class ImageStorageServiceImpl implements ImageStorageService {
 
 		return new URL(sb.toString());
 	}
-
 }

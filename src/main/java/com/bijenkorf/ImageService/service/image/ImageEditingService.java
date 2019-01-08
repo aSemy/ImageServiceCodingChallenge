@@ -1,4 +1,4 @@
-package com.bijenkorf.ImageService.service;
+package com.bijenkorf.ImageService.service.image;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
